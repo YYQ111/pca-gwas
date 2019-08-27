@@ -1,0 +1,127 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amsthm, amssymb, pdfpages} 
+
+
+
+\title{GWAS PCA investigation (title pending)}
+
+\author{Alex, Yiqi }
+
+
+\theoremstyle{definition}
+\newtheorem{df}{Definition}
+\newtheorem{ex}{Example}
+\newtheorem{as}{Assumption}
+\newtheorem{ax}{Axiom}
+\newtheorem{note}{Note}
+%\newtheorem{memo}{Memo}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{cor}{Corollary}
+\newtheorem{assump}{Assumption}
+\newtheorem{claim}{Claim}
+\newtheorem{fact}{Fact}
+
+
+
+
+\usepackage{color}
+\newcommand{\myred}[1]{{\color{red} #1}}
+
+
+
+%%% To set proper spacing
+\usepackage[vcentering,dvips]{geometry} 
+\geometry{papersize={8.5in,11in},total={6.5in,8.5in}} 
+\renewcommand{\baselinestretch}{1.15}
+\begin{document}
+	\maketitle
+	
+	
+\section{Introduction} 
+
+Genome-wide association study (GWAS) is used to investigate whether target Single Nucleotide Polymorphism (SNP) is associated with certain trait. Admixture population is involved in recent study and then, linkage disequilibrium (LD) exists because of chromosomal segments of different sub-population's (k) ancestry [1]. It suggests that Principal component analysis (PCA) which is a dimensionality-reduction method can be used to provide statistical tests for admixture population to identify the causal locus [2,3]. However, doubts are cast on the statistical power of PCA when comparing with the linear mixed model (LMM) [4]. Although both PCA and LMM are widely applied into GWAS, some researchers suggest that mixed effects model can provide stronger statistical power to detect causal relation when both admixture population and cryptic relatedness exist [4]. Considering current studies mainly focus on simple simulations or observation on real data [4, 5], existing evaluation can be limited to fully investigate the statistical power of PCA. \\
+
+Recent study demonstrates that due to the genetic drift, GWAS can be biased [7]. In order to reduce the downward bias, a more general definition of inbreeding coefficient (FST) is used to generate random genotype matrix and kinship matrix for arbitrary population structure [6-7]. In this paper, we generalize simulation to better measure performances of PCA under different setting. Therefore, more complex population structures are taken into consideration to find the optimal pieces of eigenvalues (p) used in PCA under distinction situation. We also compare the performances of PCA with fixed p under different population structure.
+
+\section{Method} 
+\subsection{Admixture Simulation}
+The construction of admixture population is mainly based on admixture simulation of Alex (2016). The related code of admixture simulation has been uploaded to Github with a R package called "bnpsd".  Some parameters are changed in order to better simulate under different situation. According to Alex (2016), the number of independent loci is 30000, in this paper the number of independent locus is 10000. The default value of Alex (2016) is 3, whereas in this project, it can be variable. Considering the difference among number of sub-population, the sample size of $i_{th}$ sub-population will be set as the smaller integer of the ratio of total sample divided by number of sub-population. 
+
+
+
+\subsection{Trait Simulation}
+The construction of trait simulation is based on a R package called "simtrait". This package constructs the complex trait simulation. 
+
+subsection{PCA GWAS implementation is just linear regression with covariates}
+
+\subsection{Result Examination Method}
+In this paper, precision-recall curves (AUC) and uniformity p-value test (RMSD) will be used to test the performance of PCA under different scenarios.
+\subsubsection{Precision-Recall Curves}
+Precision-recall (AUC) is a statistic whose y-axis represents precision and x-axis represents recall. Precision is calculated as the number of true positives divided by sum of both true positives which indicates the performance of model in predicting positives. Similarly, recall measures the ratio of number of true negatives and sum of true negatives and false negatives, which measures the performance of model in predicting negatives. The higher value of AUC, the better performance of statistical model.
+\subsubsection{Uniform P-Value Test}
+For multiple independent and identical hypothesis tests, if the null hypothesis is true, the distribution of p-values will approximate to a uniform distribution [8].   
+
+\section{Result}
+
+\subsection{true or biased kinship matrices has the same performance}
+
+\subsection{RMSD Evaluation}
+We compare the performances of PCA with different when the number of sub-population (k) equals to 10 and 50 separately in terms of RMSD. In this case, RMSD is used measure to find the optimal p under different situation. At each p, the simulations are repeated for 10 times in order to remove the extra variance.\\
+
+According to the result of RMSD box-plot of PCA when k equals to 10, it can be seen that RMSD values remain relatively high when p is smaller than 9, which satisfies the actual rank of genotype matrix (k-1). It illustrates that the performances of PCA are bad of piece of eigenvalues is smaller than rank of genotype. Additionally, there exists an obvious tendency that RMSD values decreases as p increases before p increases to 9. Once p reaches 9, RMSD value jump downwards immediately. After that, RMSD values are relatively small and stable. It shows that the piece of eigenvalues can not impose extra statistical power of PCA after p reaches the rank of genotype matrix\\
+
+Similarly to previous result, RMSD box-plot indicates that pieces of eigenvalues should be at least the rank of genotype matrix in order to obtain a good performance of PCA. Hence, these two examples show that RMSD requires p to be no smaller than the true rank of genotype matrix or number of sub-population minus 1.
+
+\subsection{AUC Evaluation(pending)}
+The situation of AUC evaluation is slightly different from RMSD evaluations. Although AUC still requires the piece of eigenvalues to be no smaller than the rank of genotype matrix, it also indicates that the AUC value will decrease when  
+
+\section{Reference List}
+$
+1
+Pasaniuc, B., Zaitlen, N., Lettre, G., Chen, G. K., Tandon, A., Kao, W. L., ... \& Larkin, E. (2011). Enhanced statistical tests for GWAS in admixed populations: assessment using African Americans from CARe and a Breast Cancer Consortium. PLoS genetics, 7(4), e1001371.
+$\\
+
+$
+2
+Bryc, K., Auton, A., Nelson, M. R., Oksenberg, J. R., Hauser, S. L., Williams, S., ... \& Bustamante, C. D. (2010). Genome-wide patterns of population structure and admixture in West Africans and African Americans. Proceedings of the National Academy of Sciences, 107(2), 786-791.
+$\\
+
+$
+3
+Price, A. L., Weale, M. E., Patterson, N., Myers, S. R., Need, A. C., Shianna, K. V., ... \& Goldstein, D. B. (2008). Long-range LD can confound genome scans in admixed populations. The American Journal of Human Genetics, 83(1), 132-135.
+$\\
+
+$
+4
+Wang, K., Hu, X., \& Peng, Y. (2013). An analytical comparison of the principal component method and the mixed effects model for association studies in the presence of cryptic relatedness and population stratification. Human heredity, 76(1), 1-9.
+$\\
+
+
+
+$
+5
+Ochoa, A., \& Storey, J. D. (2016). FST and kinship for arbitrary population structures I: Generalized definitions. BioRxiv, 083915.
+$
+
+$
+6
+Martin, A. R., Gignoux, C. R., Walters, R. K., Wojcik, G. L., Neale, B. M., Gravel, S., ... \& Kenny, E. E. (2017). Human demographic history impacts genetic risk prediction across diverse populations. The American Journal of Human Genetics, 100(4), 635-649.
+$\\
+
+
+$
+7
+Chimusa, E. R., Daya, M., Möller, M., Ramesar, R., Henn, B. M., Van Helden, P. D., ... \& Hoal, E. G. (2013). Determining ancestry proportions in complex admixture scenarios in South Africa using a novel proxy ancestry selection method. PLoS One, 8(9), e73971.
+$
+
+$
+8
+Simonsohn U, Nelson L D, Simmons J P. P-curve: a key to the file-drawer[J]. Journal of experimental psychology: General, 2014, 143(2): 534.
+$
+\end{document}
+
+
